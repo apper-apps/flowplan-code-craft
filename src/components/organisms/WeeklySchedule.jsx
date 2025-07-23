@@ -42,7 +42,7 @@ const WeeklySchedule = ({ refreshTrigger }) => {
     loadData();
   }, [currentWeekStart, refreshTrigger]);
 
-  const handleGenerateSchedule = async () => {
+const handleGenerateSchedule = async () => {
     setIsGenerating(true);
     try {
       const unscheduledTasks = tasks.filter(task => 
@@ -54,13 +54,33 @@ const WeeklySchedule = ({ refreshTrigger }) => {
         return;
       }
 
+      // Get working hours from settings (mock for now)
+      const workingHours = {
+        monday: { start: "09:00", end: "17:00", enabled: true },
+        tuesday: { start: "09:00", end: "17:00", enabled: true },
+        wednesday: { start: "09:00", end: "17:00", enabled: true },
+        thursday: { start: "09:00", end: "17:00", enabled: true },
+        friday: { start: "09:00", end: "17:00", enabled: true },
+        saturday: { start: "09:00", end: "17:00", enabled: false },
+        sunday: { start: "09:00", end: "17:00", enabled: false }
+      };
+
       const newSchedule = await scheduleService.generateWeeklySchedule(
         currentWeekStart,
-        unscheduledTasks
+        unscheduledTasks,
+        workingHours
       );
       
       setSchedule(newSchedule);
       toast.success(`Generated schedule for ${unscheduledTasks.length} tasks!`);
+      
+      // Update task scheduled dates
+      for (const item of newSchedule.scheduleItems) {
+        await taskService.updateSchedule(parseInt(item.taskId), {
+          date: format(currentWeekStart, "yyyy-MM-dd"),
+          time: item.startTime
+        });
+      }
       
       // Reload tasks to get updated scheduled dates
       const updatedTasks = await taskService.getAll();
@@ -72,8 +92,8 @@ const WeeklySchedule = ({ refreshTrigger }) => {
     }
   };
 
-  const getTaskById = (taskId) => {
-    return tasks.find(task => task.Id === taskId);
+const getTaskById = (taskId) => {
+    return tasks.find(task => task.Id === parseInt(taskId));
   };
 
   const getScheduleBlockColor = (importance) => {

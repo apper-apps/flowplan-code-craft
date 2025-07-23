@@ -10,18 +10,25 @@ import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 import Empty from "@/components/ui/Empty";
 import { taskService } from "@/services/api/taskService";
+import { projectService } from "@/services/api/projectService";
 
 const TaskList = ({ onEditTask, refreshTrigger }) => {
   const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedProject, setSelectedProject] = useState("all");
 
-  const loadTasks = async () => {
+const loadTasks = async () => {
     try {
       setError(null);
       setLoading(true);
-      const data = await taskService.getAll();
-      setTasks(data);
+      const [tasksData, projectsData] = await Promise.all([
+        taskService.getAll(),
+        projectService.getAll()
+      ]);
+      setTasks(tasksData);
+      setProjects(projectsData);
     } catch (err) {
       setError("Failed to load tasks");
     } finally {
@@ -77,26 +84,48 @@ const TaskList = ({ onEditTask, refreshTrigger }) => {
       5: "Critical"
     };
     return labels[importance] || "Medium";
+};
+
+  const getProjectById = (projectId) => {
+    return projects.find(project => project.Id === projectId);
   };
+
+  const filteredTasks = selectedProject === "all" 
+    ? tasks 
+    : tasks.filter(task => task.projectId === parseInt(selectedProject));
 
   if (loading) return <Loading />;
   if (error) return <Error message={error} onRetry={loadTasks} />;
-  if (!tasks.length) return <Empty />;
+if (!tasks.length) return <Empty />;
 
-  return (
+return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-text-primary">
-          Task List ({tasks.length})
+          Task List ({filteredTasks.length})
         </h2>
-        <Button variant="ghost" size="sm" onClick={loadTasks}>
-          <ApperIcon name="RefreshCw" size={16} />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-3">
+          <select
+            value={selectedProject}
+            onChange={(e) => setSelectedProject(e.target.value)}
+            className="text-sm border border-gray-200 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-primary-500"
+          >
+            <option value="all">All Projects</option>
+            {projects.map((project) => (
+              <option key={project.Id} value={project.Id}>
+                {project.name}
+              </option>
+            ))}
+          </select>
+          <Button variant="ghost" size="sm" onClick={loadTasks}>
+            <ApperIcon name="RefreshCw" size={16} />
+            Refresh
+          </Button>
+        </div>
       </div>
 
-      <AnimatePresence>
-        {tasks.map((task) => (
+<AnimatePresence>
+        {filteredTasks.map((task) => (
           <motion.div
             key={task.Id}
             initial={{ opacity: 0, y: 20 }}
@@ -105,7 +134,7 @@ const TaskList = ({ onEditTask, refreshTrigger }) => {
             transition={{ duration: 0.2 }}
           >
             <Card className="p-6 hover:shadow-card-hover transition-all duration-200">
-              <div className="flex items-start justify-between mb-4">
+<div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold text-text-primary">
@@ -114,6 +143,17 @@ const TaskList = ({ onEditTask, refreshTrigger }) => {
                     <Badge className={`importance-badge ${getImportanceBadgeClass(task.importance)}`}>
                       {getImportanceLabel(task.importance)}
                     </Badge>
+                    {task.projectId && (
+                      <div className="flex items-center gap-1">
+                        <div 
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: getProjectById(task.projectId)?.color || '#5B47E0' }}
+                        />
+                        <span className="text-xs text-text-muted">
+                          {getProjectById(task.projectId)?.name}
+                        </span>
+                      </div>
+                    )}
                   </div>
                   
                   {task.description && (

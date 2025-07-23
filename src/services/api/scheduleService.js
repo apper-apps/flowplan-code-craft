@@ -13,7 +13,7 @@ class ScheduleService {
     return schedule ? { ...schedule } : null;
   }
 
-  async generateWeeklySchedule(weekStartDate, tasks) {
+async generateWeeklySchedule(weekStartDate, tasks, workingHours = null) {
     await this.delay(800); // Simulate AI processing time
     
     const weekKey = format(weekStartDate, "yyyy-MM-dd");
@@ -26,11 +26,21 @@ class ScheduleService {
       return (a.estimatedDuration || 0) - (b.estimatedDuration || 0); // Shorter duration first for same importance
     });
 
-    const workDays = ["monday", "tuesday", "wednesday", "thursday", "friday"];
-    const workHours = { start: 9, end: 17 }; // 9 AM to 5 PM
-    const maxHoursPerDay = workHours.end - workHours.start;
+    // Default working hours if not provided
+    const defaultWorkingHours = {
+      monday: { start: "09:00", end: "17:00", enabled: true },
+      tuesday: { start: "09:00", end: "17:00", enabled: true },
+      wednesday: { start: "09:00", end: "17:00", enabled: true },
+      thursday: { start: "09:00", end: "17:00", enabled: true },
+      friday: { start: "09:00", end: "17:00", enabled: true },
+      saturday: { start: "09:00", end: "17:00", enabled: false },
+      sunday: { start: "09:00", end: "17:00", enabled: false }
+    };
+
+    const hours = workingHours || defaultWorkingHours;
+    const workDays = Object.keys(hours).filter(day => hours[day].enabled);
     
-    const scheduleItems = [];
+const scheduleItems = [];
     let currentDay = 0;
     let currentDayHours = 0;
     let scheduleItemId = Math.max(...this.schedules.flatMap(s => s.scheduleItems.map(item => item.Id)), 0) + 1;
@@ -38,28 +48,35 @@ class ScheduleService {
     for (const task of sortedTasks) {
       const taskHours = (task.estimatedDuration || 60) / 60; // Convert minutes to hours
       
+      // Get current day's working hours
+      if (currentDay >= workDays.length) break;
+      
+      const currentDayName = workDays[currentDay];
+      const dayHours = hours[currentDayName];
+      const startHour = parseInt(dayHours.start.split(':')[0]);
+      const endHour = parseInt(dayHours.end.split(':')[0]);
+      const maxHoursPerDay = endHour - startHour;
+      
       // If task won't fit in current day, move to next day
       if (currentDayHours + taskHours > maxHoursPerDay) {
         currentDay++;
         currentDayHours = 0;
+        if (currentDay >= workDays.length) break;
       }
       
-      // If we've run out of work days, break
-      if (currentDay >= workDays.length) {
-        break;
-      }
-      
-      const startHour = workHours.start + Math.floor(currentDayHours);
+      const currentDayInfo = hours[workDays[currentDay]];
+      const dayStartHour = parseInt(currentDayInfo.start.split(':')[0]);
+      const actualStartHour = dayStartHour + Math.floor(currentDayHours);
       const startMinute = Math.round((currentDayHours % 1) * 60);
       const endTime = currentDayHours + taskHours;
-      const endHour = workHours.start + Math.floor(endTime);
+      const endHour = dayStartHour + Math.floor(endTime);
       const endMinute = Math.round((endTime % 1) * 60);
       
       scheduleItems.push({
         Id: scheduleItemId++,
         taskId: task.Id.toString(),
         day: workDays[currentDay],
-        startTime: `${startHour.toString().padStart(2, "0")}:${startMinute.toString().padStart(2, "0")}`,
+        startTime: `${actualStartHour.toString().padStart(2, "0")}:${startMinute.toString().padStart(2, "0")}`,
         endTime: `${endHour.toString().padStart(2, "0")}:${endMinute.toString().padStart(2, "0")}`
       });
       

@@ -1,14 +1,16 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
-import Card from "@/components/atoms/Card";
-import Button from "@/components/atoms/Button";
-import FormField from "@/components/molecules/FormField";
-import ImportanceSlider from "@/components/molecules/ImportanceSlider";
-import AIEstimationButton from "@/components/molecules/AIEstimationButton";
-import ApperIcon from "@/components/ApperIcon";
+import { projectService } from "@/services/api/projectService";
 import { taskService } from "@/services/api/taskService";
 import { aiService } from "@/services/api/aiService";
+import ApperIcon from "@/components/ApperIcon";
+import Card from "@/components/atoms/Card";
+import Button from "@/components/atoms/Button";
+import ImportanceSlider from "@/components/molecules/ImportanceSlider";
+import AIEstimationButton from "@/components/molecules/AIEstimationButton";
+import FormField from "@/components/molecules/FormField";
+import Loading from "@/components/ui/Loading";
 
 const TaskForm = ({ onTaskCreated, initialTask = null }) => {
   const [formData, setFormData] = useState({
@@ -16,11 +18,27 @@ const TaskForm = ({ onTaskCreated, initialTask = null }) => {
     description: initialTask?.description || "",
     importance: initialTask?.importance || 3,
     estimatedDuration: initialTask?.estimatedDuration || null,
-    manualDuration: ""
+    manualDuration: "",
+    projectId: initialTask?.projectId || null
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
+  const [projects, setProjects] = useState([]);
+  const [loadingProjects, setLoadingProjects] = useState(true);
 
+  useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        const data = await projectService.getAll();
+        setProjects(data);
+      } catch (error) {
+        console.error("Failed to load projects:", error);
+      } finally {
+        setLoadingProjects(false);
+      }
+    };
+    loadProjects();
+  }, []);
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
@@ -79,12 +97,13 @@ const TaskForm = ({ onTaskCreated, initialTask = null }) => {
         ? parseInt(formData.manualDuration) * 60 
         : formData.estimatedDuration;
 
-      const taskData = {
+const taskData = {
         title: formData.title.trim(),
         description: formData.description.trim(),
         importance: formData.importance,
         estimatedDuration: finalDuration,
-        status: "not-started"
+        status: "not-started",
+        projectId: formData.projectId ? parseInt(formData.projectId) : null
       };
 
       let result;
@@ -100,13 +119,14 @@ const TaskForm = ({ onTaskCreated, initialTask = null }) => {
         onTaskCreated(result);
       }
 
-      if (!initialTask) {
+if (!initialTask) {
         setFormData({
           title: "",
           description: "",
           importance: 3,
           estimatedDuration: null,
-          manualDuration: ""
+          manualDuration: "",
+          projectId: null
         });
       }
     } catch (error) {
@@ -159,7 +179,29 @@ const TaskForm = ({ onTaskCreated, initialTask = null }) => {
               className="flex min-h-[80px] w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
               rows={3}
             />
-          </FormField>
+</FormField>
+
+          <div>
+            <label className="text-sm font-medium text-text-primary mb-2 block">
+              Project (Optional)
+            </label>
+            <select
+              value={formData.projectId || ""}
+              onChange={(e) => handleInputChange("projectId", e.target.value || null)}
+              className="flex h-10 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              disabled={loadingProjects}
+            >
+              <option value="">No Project</option>
+              {projects.map((project) => (
+                <option key={project.Id} value={project.Id}>
+                  {project.name}
+                </option>
+              ))}
+            </select>
+            {loadingProjects && (
+              <p className="text-xs text-text-muted mt-1">Loading projects...</p>
+            )}
+          </div>
 
           <ImportanceSlider
             value={formData.importance}

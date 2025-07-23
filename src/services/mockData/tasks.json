@@ -1,62 +1,78 @@
 [
-  {
+{
     "Id": 1,
-    "title": "Design user interface mockups",
-    "description": "Create wireframes and mockups for the new dashboard interface including responsive layouts for mobile and desktop",
+    "title": "Design landing page mockups",
+    "description": "Create high-fidelity mockups for the new product landing page with mobile responsiveness",
     "importance": 4,
-    "estimatedDuration": 480,
-    "actualDuration": null,
+    "estimatedDuration": 240,
     "status": "in-progress",
-    "createdAt": "2024-01-15T09:00:00Z",
-    "scheduledDate": "2024-01-16",
-    "scheduledTime": "09:00"
+    "createdAt": "2024-01-15T09:30:00.000Z",
+    "actualDuration": null,
+    "scheduledDate": null,
+    "scheduledTime": null,
+    "projectId": 1
   },
-  {
+{
     "Id": 2,
-    "title": "Review code pull requests",
-    "description": "Review and provide feedback on 3 pending pull requests from the development team",
+    "title": "Implement user authentication",
+    "description": "Set up secure login/logout functionality with JWT tokens",
+    "importance": 5,
+    "estimatedDuration": 180,
+    "status": "not-started",
+    "createdAt": "2024-01-16T14:15:00.000Z",
+    "actualDuration": null,
+    "scheduledDate": null,
+    "scheduledTime": null,
+    "projectId": 2
+  },
+{
+    "Id": 3,
+    "title": "Write API documentation",
+    "description": "Document all REST endpoints with examples and response formats",
     "importance": 3,
     "estimatedDuration": 120,
-    "actualDuration": 90,
     "status": "completed",
-    "createdAt": "2024-01-15T10:30:00Z",
-    "scheduledDate": "2024-01-15",
-    "scheduledTime": "14:00"
-  },
-  {
-    "Id": 3,
-    "title": "Client presentation preparation",
-    "description": "Prepare slides and demo for the quarterly business review with key client stakeholders",
-    "importance": 5,
-    "estimatedDuration": 240,
-    "actualDuration": null,
-    "status": "not-started",
-    "createdAt": "2024-01-15T11:15:00Z",
+    "createdAt": "2024-01-14T11:20:00.000Z",
+    "actualDuration": 135,
     "scheduledDate": null,
-    "scheduledTime": null
+    "scheduledTime": null,
+    "projectId": 1
   },
-  {
+{
     "Id": 4,
-    "title": "Database optimization",
-    "description": "Analyze and optimize slow database queries identified in the performance monitoring report",
-    "importance": 3,
-    "estimatedDuration": 180,
-    "actualDuration": null,
+    "title": "Set up CI/CD pipeline",
+    "description": "Configure automated testing and deployment workflows",
+    "importance": 4,
+    "estimatedDuration": 300,
     "status": "not-started",
-    "createdAt": "2024-01-15T13:45:00Z",
+    "createdAt": "2024-01-17T08:45:00.000Z",
+    "actualDuration": null,
     "scheduledDate": null,
-    "scheduledTime": null
+    "scheduledTime": null,
+    "projectId": 4
   },
-  {
+{
     "Id": 5,
-    "title": "Team standup meeting",
-    "description": "Daily team standup to discuss progress, blockers, and plan for the day",
-    "importance": 2,
-    "estimatedDuration": 30,
-    "actualDuration": 25,
-    "status": "completed",
-    "createdAt": "2024-01-16T08:30:00Z",
-    "scheduledDate": "2024-01-16",
-    "scheduledTime": "09:00"
+    "title": "Optimize database queries",
+    "description": "Improve query performance and add proper indexing",
+    "importance": 3,
+    "estimatedDuration": 90,
+    "status": "in-progress",
+    "createdAt": "2024-01-18T16:00:00.000Z",
+    "actualDuration": null,
+    "scheduledDate": null,
+    "scheduledTime": null,
+    "projectId": 4
   }
-]
+{
+    "Id": 6,
+    "title": "Create marketing materials",
+    "description": "Design brochures and social media content for product launch",
+    "importance": 2,
+    "estimatedDuration": 150,
+    "status": "not-started",
+    "createdAt": "2024-01-19T10:30:00.000Z",
+    "actualDuration": null,
+    "scheduledDate": null,
+    "scheduledTime": null,
+    "projectId": 3

@@ -7,6 +7,7 @@ import TasksPage from "@/components/pages/TasksPage";
 import SchedulePage from "@/components/pages/SchedulePage";
 import AnalyticsPage from "@/components/pages/AnalyticsPage";
 import SettingsPage from "@/components/pages/SettingsPage";
+import ProjectsPage from "@/components/pages/ProjectsPage";
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -32,8 +33,9 @@ function App() {
             
             <main className="flex-1 overflow-auto p-6">
               <div className="max-w-7xl mx-auto">
-                <Routes>
+<Routes>
                   <Route path="/" element={<TasksPage />} />
+                  <Route path="/projects" element={<ProjectsPage />} />
                   <Route path="/schedule" element={<SchedulePage />} />
                   <Route path="/analytics" element={<AnalyticsPage />} />
                   <Route path="/settings" element={<SettingsPage />} />

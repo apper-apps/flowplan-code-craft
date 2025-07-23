@@ -19,7 +19,7 @@ class TaskService {
     return { ...task };
   }
 
-  async create(taskData) {
+async create(taskData) {
     await this.delay(400);
     const newTask = {
       ...taskData,
@@ -27,7 +27,8 @@ class TaskService {
       createdAt: new Date().toISOString(),
       actualDuration: null,
       scheduledDate: null,
-      scheduledTime: null
+      scheduledTime: null,
+      projectId: taskData.projectId || null
     };
     this.tasks.push(newTask);
     return { ...newTask };
@@ -59,10 +60,29 @@ class TaskService {
     await this.delay(200);
     return this.tasks.filter(task => task.status === status);
   }
-
-  async getUnscheduledTasks() {
+async getUnscheduledTasks() {
     await this.delay(200);
     return this.tasks.filter(task => !task.scheduledDate);
+  }
+
+  async getTasksByProject(projectId) {
+    await this.delay(200);
+    return this.tasks.filter(task => task.projectId === parseInt(projectId));
+  }
+
+  async updateSchedule(taskId, scheduleData) {
+    await this.delay(300);
+    const index = this.tasks.findIndex(t => t.Id === parseInt(taskId));
+    if (index === -1) {
+      throw new Error("Task not found");
+    }
+    
+    this.tasks[index] = { 
+      ...this.tasks[index], 
+      scheduledDate: scheduleData.date,
+      scheduledTime: scheduleData.time
+    };
+    return { ...this.tasks[index] };
   }
 
   delay(ms) {

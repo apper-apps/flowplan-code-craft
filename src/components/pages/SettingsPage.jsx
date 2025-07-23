@@ -7,10 +7,16 @@ import FormField from "@/components/molecules/FormField";
 import ApperIcon from "@/components/ApperIcon";
 
 const SettingsPage = () => {
-  const [settings, setSettings] = useState({
-    workHoursStart: "09:00",
-    workHoursEnd: "17:00",
-    workDays: ["monday", "tuesday", "wednesday", "thursday", "friday"],
+const [settings, setSettings] = useState({
+    workingHours: {
+      monday: { start: "09:00", end: "17:00", enabled: true },
+      tuesday: { start: "09:00", end: "17:00", enabled: true },
+      wednesday: { start: "09:00", end: "17:00", enabled: true },
+      thursday: { start: "09:00", end: "17:00", enabled: true },
+      friday: { start: "09:00", end: "17:00", enabled: true },
+      saturday: { start: "09:00", end: "17:00", enabled: false },
+      sunday: { start: "09:00", end: "17:00", enabled: false }
+    },
     aiEstimationEnabled: true,
     autoSchedulingEnabled: true,
     breakDuration: 15,
@@ -23,12 +29,29 @@ const SettingsPage = () => {
     setSettings(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleWorkDayToggle = (day) => {
+const handleWorkDayToggle = (day) => {
     setSettings(prev => ({
       ...prev,
-      workDays: prev.workDays.includes(day)
-        ? prev.workDays.filter(d => d !== day)
-        : [...prev.workDays, day]
+      workingHours: {
+        ...prev.workingHours,
+        [day]: {
+          ...prev.workingHours[day],
+          enabled: !prev.workingHours[day].enabled
+        }
+      }
+    }));
+  };
+
+  const handleTimeChange = (day, field, value) => {
+    setSettings(prev => ({
+      ...prev,
+      workingHours: {
+        ...prev.workingHours,
+        [day]: {
+          ...prev.workingHours[day],
+          [field]: value
+        }
+      }
     }));
   };
 
@@ -45,7 +68,7 @@ const SettingsPage = () => {
     }
   };
 
-  const workDayOptions = [
+const workDayOptions = [
     { key: "monday", label: "Monday" },
     { key: "tuesday", label: "Tuesday" },
     { key: "wednesday", label: "Wednesday" },
@@ -73,45 +96,53 @@ const SettingsPage = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Work Schedule Settings */}
-        <Card className="p-6">
+<Card className="p-6">
           <h3 className="text-lg font-semibold text-text-primary mb-4">
-            Work Schedule
+            Working Hours by Day
           </h3>
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                label="Start Time"
-                type="time"
-                value={settings.workHoursStart}
-                onChange={(e) => handleInputChange("workHoursStart", e.target.value)}
-              />
-              <FormField
-                label="End Time"
-                type="time"
-                value={settings.workHoursEnd}
-                onChange={(e) => handleInputChange("workHoursEnd", e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-text-primary mb-3 block">
-                Work Days
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                {workDayOptions.map(({ key, label }) => (
-                  <label key={key} className="flex items-center gap-2 cursor-pointer">
+            {workDayOptions.map(({ key, label }) => (
+              <div key={key} className="p-4 border border-gray-200 rounded-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={settings.workDays.includes(key)}
+                      checked={settings.workingHours[key].enabled}
                       onChange={() => handleWorkDayToggle(key)}
                       className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
                     />
-                    <span className="text-sm text-text-primary">{label}</span>
+                    <span className="text-sm font-medium text-text-primary">{label}</span>
                   </label>
-                ))}
+                </div>
+                
+                {settings.workingHours[key].enabled && (
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs font-medium text-text-secondary mb-1 block">
+                        Start Time
+                      </label>
+                      <input
+                        type="time"
+                        value={settings.workingHours[key].start}
+                        onChange={(e) => handleTimeChange(key, 'start', e.target.value)}
+                        className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-medium text-text-secondary mb-1 block">
+                        End Time
+                      </label>
+                      <input
+                        type="time"
+                        value={settings.workingHours[key].end}
+                        onChange={(e) => handleTimeChange(key, 'end', e.target.value)}
+                        className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            ))}
           </div>
         </Card>
 
