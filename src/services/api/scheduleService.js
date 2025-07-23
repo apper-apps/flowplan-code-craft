@@ -65,21 +65,20 @@ const scheduleItems = [];
       }
       
       const currentDayInfo = hours[workDays[currentDay]];
-      const dayStartHour = parseInt(currentDayInfo.start.split(':')[0]);
+const dayStartHour = parseInt(currentDayInfo.start.split(':')[0]);
       const actualStartHour = dayStartHour + Math.floor(currentDayHours);
       const startMinute = Math.round((currentDayHours % 1) * 60);
       const endTime = currentDayHours + taskHours;
-      const endHour = dayStartHour + Math.floor(endTime);
+      const taskEndHour = dayStartHour + Math.floor(endTime);
       const endMinute = Math.round((endTime % 1) * 60);
       
       scheduleItems.push({
         Id: scheduleItemId++,
-        taskId: task.Id.toString(),
+taskId: task.Id.toString(),
         day: workDays[currentDay],
         startTime: `${actualStartHour.toString().padStart(2, "0")}:${startMinute.toString().padStart(2, "0")}`,
-        endTime: `${endHour.toString().padStart(2, "0")}:${endMinute.toString().padStart(2, "0")}`
+        endTime: `${taskEndHour.toString().padStart(2, "0")}:${endMinute.toString().padStart(2, "0")}`
       });
-      
       currentDayHours += taskHours + 0.25; // Add 15-minute buffer between tasks
     }
 
