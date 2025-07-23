@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import ApperIcon from "@/components/atoms/ApperIcon";
+import ApperIcon from "@/components/ApperIcon";
 import TaskForm from "@/components/organisms/TaskForm";
 import TaskList from "@/components/organisms/TaskList";
+
 const TasksPage = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [editingTask, setEditingTask] = useState(null);
