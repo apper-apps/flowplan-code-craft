@@ -1,0 +1,98 @@
+@import 'react-toastify/dist/ReactToastify.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  
+  body {
+    @apply font-sans antialiased;
+  }
+}
+
+@layer components {
+  .sidebar-nav-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-lg text-text-secondary hover:text-primary-600 hover:bg-primary-50 transition-all duration-200;
+  }
+  
+  .sidebar-nav-item.active {
+    @apply text-primary-600 bg-primary-50 shadow-sm;
+  }
+  
+  .task-card {
+    @apply bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all duration-200 border border-gray-100;
+  }
+  
+  .importance-badge {
+    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .importance-1 {
+    @apply bg-blue-100 text-blue-800;
+  }
+  
+  .importance-2 {
+    @apply bg-green-100 text-green-800;
+  }
+  
+  .importance-3 {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+  
+  .importance-4 {
+    @apply bg-orange-100 text-orange-800;
+  }
+  
+  .importance-5 {
+    @apply bg-red-100 text-red-800;
+  }
+  
+  .ai-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-primary text-white text-sm font-medium shadow-ai-glow;
+  }
+  
+  .schedule-block {
+    @apply rounded-lg p-3 text-white text-sm font-medium shadow-sm cursor-pointer hover:shadow-md transition-all duration-200;
+  }
+}
+
+/* Toast Overrides */
+.Toastify__toast-container {
+  @apply !w-96;
+}
+
+.Toastify__toast {
+  @apply !rounded-xl !shadow-card;
+  @apply !min-h-[64px] !p-4;
+  @apply !font-sans;
+}
+
+.Toastify__toast--success {
+  @apply !bg-white !text-text-primary;
+  border-left: 4px solid #4ECDC4;
+}
+
+.Toastify__toast--error {
+  @apply !bg-white !text-text-primary;
+  border-left: 4px solid #FF6B6B;
+}
+
+.Toastify__toast--info {
+  @apply !bg-white !text-text-primary;
+  border-left: 4px solid #4D96FF;
+}
+
+.Toastify__progress-bar--success {
+  @apply !bg-accent-teal;
+}
+
+.Toastify__progress-bar--error {
+  @apply !bg-accent-coral;
+}
+
+.Toastify__progress-bar--info {
+  @apply !bg-accent-blue;
+}

@@ -1,0 +1,45 @@
+[
+  {
+    "Id": 1,
+    "weekStartDate": "2024-01-15",
+    "scheduleItems": [
+      {
+        "Id": 1,
+        "taskId": "1",
+        "day": "monday",
+        "startTime": "09:00",
+        "endTime": "13:00"
+      },
+      {
+        "Id": 2,
+        "taskId": "2",
+        "day": "monday",
+        "startTime": "14:00",
+        "endTime": "16:00"
+      },
+      {
+        "Id": 3,
+        "taskId": "5",
+        "day": "tuesday",
+        "startTime": "09:00",
+        "endTime": "09:30"
+      },
+      {
+        "Id": 4,
+        "taskId": "3",
+        "day": "wednesday",
+        "startTime": "10:00",
+        "endTime": "14:00"
+      },
+      {
+        "Id": 5,
+        "taskId": "4",
+        "day": "thursday",
+        "startTime": "09:00",
+        "endTime": "12:00"
+      }
+    ],
+    "generatedAt": "2024-01-15T08:00:00Z",
+    "totalHours": 40
+  }
+]

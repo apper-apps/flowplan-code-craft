@@ -1,0 +1,62 @@
+[
+  {
+    "Id": 1,
+    "title": "Design user interface mockups",
+    "description": "Create wireframes and mockups for the new dashboard interface including responsive layouts for mobile and desktop",
+    "importance": 4,
+    "estimatedDuration": 480,
+    "actualDuration": null,
+    "status": "in-progress",
+    "createdAt": "2024-01-15T09:00:00Z",
+    "scheduledDate": "2024-01-16",
+    "scheduledTime": "09:00"
+  },
+  {
+    "Id": 2,
+    "title": "Review code pull requests",
+    "description": "Review and provide feedback on 3 pending pull requests from the development team",
+    "importance": 3,
+    "estimatedDuration": 120,
+    "actualDuration": 90,
+    "status": "completed",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "scheduledDate": "2024-01-15",
+    "scheduledTime": "14:00"
+  },
+  {
+    "Id": 3,
+    "title": "Client presentation preparation",
+    "description": "Prepare slides and demo for the quarterly business review with key client stakeholders",
+    "importance": 5,
+    "estimatedDuration": 240,
+    "actualDuration": null,
+    "status": "not-started",
+    "createdAt": "2024-01-15T11:15:00Z",
+    "scheduledDate": null,
+    "scheduledTime": null
+  },
+  {
+    "Id": 4,
+    "title": "Database optimization",
+    "description": "Analyze and optimize slow database queries identified in the performance monitoring report",
+    "importance": 3,
+    "estimatedDuration": 180,
+    "actualDuration": null,
+    "status": "not-started",
+    "createdAt": "2024-01-15T13:45:00Z",
+    "scheduledDate": null,
+    "scheduledTime": null
+  },
+  {
+    "Id": 5,
+    "title": "Team standup meeting",
+    "description": "Daily team standup to discuss progress, blockers, and plan for the day",
+    "importance": 2,
+    "estimatedDuration": 30,
+    "actualDuration": 25,
+    "status": "completed",
+    "createdAt": "2024-01-16T08:30:00Z",
+    "scheduledDate": "2024-01-16",
+    "scheduledTime": "09:00"
+  }
+]
